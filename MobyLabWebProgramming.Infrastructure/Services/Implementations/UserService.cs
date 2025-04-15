@@ -21,11 +21,11 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
 {
     public async Task<ServiceResponse<UserDTO>> GetUser(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await repository.GetAsync(new UserProjectionSpec(id), cancellationToken); // Get a user using a specification on the repository.
+        var result = await repository.GetAsync(new UserWithProfileProjectionSpec(id), cancellationToken);
 
-        return result != null ? 
-            ServiceResponse.ForSuccess(result) : 
-            ServiceResponse.FromError<UserDTO>(CommonErrors.UserNotFound); // Pack the result or error into a ServiceResponse.
+        return result != null
+            ? ServiceResponse.ForSuccess(result)
+            : ServiceResponse.FromError<UserDTO>(CommonErrors.UserNotFound); // Pack the result or error into a ServiceResponse.
     }
 
     public async Task<ServiceResponse<PagedResponse<UserDTO>>> GetUsers(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)

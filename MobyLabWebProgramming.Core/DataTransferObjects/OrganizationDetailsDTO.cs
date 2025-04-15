@@ -4,5 +4,5 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
 public class OrganizationDetailsDTO : OrganizationDTO
 {
-    public ICollection<Project> Projects { get; set; }
+    public List<ProjectDTO> Projects { get; set; } = new();
 }

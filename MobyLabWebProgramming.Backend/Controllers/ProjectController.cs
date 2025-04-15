@@ -32,7 +32,7 @@ public class ProjectController(IUserService userService, IProjectService project
             ErrorMessageResult<PagedResponse<ProjectDTO>>(currentUser.Error);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<RequestResponse>> Add([FromBody] ProjectAddDTO project)
     {
@@ -42,7 +42,7 @@ public class ProjectController(IUserService userService, IProjectService project
             ErrorMessageResult(currentUser.Error);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     public async Task<ActionResult<RequestResponse>> Update([FromBody] ProjectUpdateDTO project)
     {
@@ -52,7 +52,7 @@ public class ProjectController(IUserService userService, IProjectService project
             ErrorMessageResult(currentUser.Error);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid id)
     {

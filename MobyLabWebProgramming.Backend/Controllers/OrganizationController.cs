@@ -39,17 +39,15 @@ public class OrganizationController(IOrganizationService organizationService, IU
     {
         Console.WriteLine("Add Organization");
         var currentUser = await GetCurrentUser();
-        // return currentUser.Result != null ?
-        //     FromServiceResponse(await organizationService.AddOrganization(organization, currentUser.Result)) :
-        //     ErrorMessageResult(currentUser.Error);
-        if (currentUser.Result != null)
-        {
-            // print "****************"
-            Console.WriteLine("*****************************");
-            return FromServiceResponse(await organizationService.AddOrganization(organization, currentUser.Result));
-        }
-        Console.WriteLine("=---------------------");
-        return ErrorMessageResult(currentUser.Error);
+        return currentUser.Result != null ?
+            FromServiceResponse(await organizationService.AddOrganization(organization, currentUser.Result)) :
+            ErrorMessageResult(currentUser.Error);
+        // if (currentUser.Result != null)
+        // {
+        //     return FromServiceResponse(await organizationService.AddOrganization(organization, currentUser.Result));
+        // }
+        //
+        // return ErrorMessageResult(currentUser.Error);
     }
 
     [Authorize(Roles = "Admin")]
@@ -71,4 +69,15 @@ public class OrganizationController(IOrganizationService organizationService, IU
             FromServiceResponse(await organizationService.DeleteOrganization(id)) :
             ErrorMessageResult(currentUser.Error);
     }
+    
+    [Authorize]
+    [HttpGet("details/{id:guid}")]
+    public async Task<ActionResult<RequestResponse<OrganizationDetailsDTO>>> GetOrganizationDetailsById([FromRoute] Guid id)
+    {
+        var currentUser = await GetCurrentUser();
+        return currentUser.Result != null
+            ? FromServiceResponse(await organizationService.GetOrganizationProject(id))
+            : ErrorMessageResult<OrganizationDetailsDTO>(currentUser.Error);
+    }
+
 }
