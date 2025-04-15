@@ -11,4 +11,5 @@ public interface IOrganizationService
     Task<ServiceResponse> AddOrganization(OrganizationAddDTO organization, UserDTO? requestingUser = null, CancellationToken cancellationToken = default);
     Task<ServiceResponse> UpdateOrganization(OrganizationUpdateDTO organization, UserDTO? requestingUser = null, CancellationToken cancellationToken = default);
     Task<ServiceResponse> DeleteOrganization(Guid id, CancellationToken cancellationToken = default);
+    Task<ServiceResponse<OrganizationDetailsDTO>> GetOrganizationProject(Guid id, CancellationToken cancellationToken = default);
 }
