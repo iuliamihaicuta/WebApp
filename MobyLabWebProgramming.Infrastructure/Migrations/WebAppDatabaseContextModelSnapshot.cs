@@ -189,6 +189,44 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.UserProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Bio")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserProfile");
+                });
+
             modelBuilder.Entity("OrganizationUser", b =>
                 {
                     b.Property<Guid>("AdminsId")
@@ -245,6 +283,17 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.UserProfile", b =>
+                {
+                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("MobyLabWebProgramming.Core.Entities.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OrganizationUser", b =>
                 {
                     b.HasOne("MobyLabWebProgramming.Core.Entities.User", null)
@@ -275,6 +324,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Navigation("Applications");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Profile");
                 });
 #pragma warning restore 612, 618
         }

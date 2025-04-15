@@ -21,4 +21,6 @@ public class User : BaseEntity
     public ICollection<Application> Applications { get; set; } = null!;
     public ICollection<Notification> Notifications { get; set; } = null!;
     
+    public UserProfile? Profile { get; set; }
+    
 }

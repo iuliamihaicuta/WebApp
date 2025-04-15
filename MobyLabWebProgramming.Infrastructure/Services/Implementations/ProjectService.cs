@@ -34,6 +34,7 @@ public class ProjectService(IRepository<WebAppDatabaseContext> repository) : IPr
     public async Task<ServiceResponse> AddProject(ProjectAddDTO project, UserDTO? requestingUser, CancellationToken cancellationToken = default)
     {
         // TODO: Add role check or organization ownership validation if needed
+        
 
         var entity = new Project
         {
