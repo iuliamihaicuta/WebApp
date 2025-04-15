@@ -17,7 +17,7 @@ public class ApplicationService(IRepository<WebAppDatabaseContext> repository) :
 {
     public async Task<ServiceResponse<ApplicationDTO>> GetApplication(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await repository.GetAsync(new ApplicationProjectionSpec(id), cancellationToken);
+        var result = await repository.GetAsync(new ApplicationProjectionSpec(id, IdEnum.ApplicationId), cancellationToken);
         return result != null ?
             ServiceResponse.ForSuccess(result) :
             ServiceResponse.FromError<ApplicationDTO>(CommonErrors.ApplicationNotFound);
@@ -47,19 +47,37 @@ public class ApplicationService(IRepository<WebAppDatabaseContext> repository) :
         return ServiceResponse.ForSuccess(result);
     }
 
+    // public async Task<ServiceResponse> AddApplication(ApplicationAddDTO application, UserDTO? requestingUser = null, CancellationToken cancellationToken = default)
+    // {
+    //     var newEntity = new Application
+    //     {
+    //         UserId = application.UserId,
+    //         ProjectId = application.ProjectId,
+    //         Status = ApplicationStatusEnum.Pending,
+    //         CreatedAt = DateTime.UtcNow
+    //     };
+    //
+    //     await repository.AddAsync(newEntity, cancellationToken);
+    //     return ServiceResponse.ForSuccess();
+    // }
     public async Task<ServiceResponse> AddApplication(ApplicationAddDTO application, UserDTO? requestingUser = null, CancellationToken cancellationToken = default)
+{
+    if (requestingUser == null)
     {
-        var newEntity = new Application
-        {
-            UserId = application.UserId,
-            ProjectId = application.ProjectId,
-            Status = ApplicationStatusEnum.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await repository.AddAsync(newEntity, cancellationToken);
-        return ServiceResponse.ForSuccess();
+        return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "User not authenticated.", ErrorCodes.CannotAdd));
     }
+
+    var newEntity = new Application
+    {
+        UserId = requestingUser.Id, // 👈 Aici folosim userul curent
+        ProjectId = application.ProjectId,
+        Status = ApplicationStatusEnum.Pending,
+        CreatedAt = DateTime.UtcNow
+    };
+
+    await repository.AddAsync(newEntity, cancellationToken);
+    return ServiceResponse.ForSuccess();
+}
 
     public async Task<ServiceResponse> UpdateApplication(ApplicationUpdateDTO application, UserDTO? requestingUser = null, CancellationToken cancellationToken = default)
     {

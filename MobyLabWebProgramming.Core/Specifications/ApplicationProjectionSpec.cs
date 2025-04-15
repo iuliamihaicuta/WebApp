@@ -8,27 +8,27 @@ namespace MobyLabWebProgramming.Core.Specifications;
 
 public sealed class ApplicationProjectionSpec : Specification<Application, ApplicationDTO>
 {
-    public ApplicationProjectionSpec(Guid? userId = null, Guid? projectId = null)
-    {
-        Query.Include(a => a.Project)
-            .Include(a => a.User);
-
-        Query.Select(a => new ApplicationDTO
-        {
-            Id = a.Id,
-            UserId = a.UserId,
-            UserName = a.User.Name,
-            ProjectId = a.ProjectId,
-            ProjectTitle = a.Project.Title,
-            Status = a.Status
-        });
-
-        if (userId.HasValue)
-            Query.Where(a => a.UserId == userId.Value);
-
-        if (projectId.HasValue)
-            Query.Where(a => a.ProjectId == projectId.Value);
-    }
+    // public ApplicationProjectionSpec(Guid? userId = null, Guid? projectId = null)
+    // {
+    //     Query.Include(a => a.Project)
+    //         .Include(a => a.User);
+    //
+    //     Query.Select(a => new ApplicationDTO
+    //     {
+    //         Id = a.Id,
+    //         UserId = a.UserId,
+    //         UserName = a.User.Name,
+    //         ProjectId = a.ProjectId,
+    //         ProjectTitle = a.Project.Title,
+    //         Status = a.Status
+    //     });
+    //
+    //     if (userId.HasValue)
+    //         Query.Where(a => a.UserId == userId.Value);
+    //
+    //     if (projectId.HasValue)
+    //         Query.Where(a => a.ProjectId == projectId.Value);
+    // }
     
     public ApplicationProjectionSpec(string? search = null)
     {
@@ -67,7 +67,20 @@ public sealed class ApplicationProjectionSpec : Specification<Application, Appli
             case IdEnum.OrganizationId:
                 Query.Where(a => a.Id == id);
                 break;
+            case IdEnum.ApplicationId:
+                Query.Where(a => a.Id == id);
+                break;
         }
+        
+        Query.Select(a => new ApplicationDTO
+        {
+            Id = a.Id,
+            UserId = a.UserId,
+            UserName = a.User.Name,
+            ProjectId = a.ProjectId,
+            ProjectTitle = a.Project.Title,
+            Status = a.Status
+        });
     }
 
 }

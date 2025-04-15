@@ -63,11 +63,22 @@ public class ApplicationController(IApplicationService applicationService, IUser
     }
 
 
+    // [Authorize]
+    // [HttpPost]
+    // public async Task<ActionResult<RequestResponse>> Add([FromBody] ApplicationAddDTO application)
+    // {
+    //     var currentUser = await GetCurrentUser();
+    //     return currentUser.Result != null
+    //         ? FromServiceResponse(await applicationService.AddApplication(application, currentUser.Result))
+    //         : ErrorMessageResult(currentUser.Error);
+    // }
+    
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<RequestResponse>> Add([FromBody] ApplicationAddDTO application)
     {
         var currentUser = await GetCurrentUser();
+
         return currentUser.Result != null
             ? FromServiceResponse(await applicationService.AddApplication(application, currentUser.Result))
             : ErrorMessageResult(currentUser.Error);
