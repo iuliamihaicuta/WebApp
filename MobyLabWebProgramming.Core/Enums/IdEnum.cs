@@ -4,5 +4,6 @@ public enum IdEnum
 {
     UserId,
     ProjectId,
-    OrganizationId
+    OrganizationId,
+    ApplicationId
 }

@@ -189,7 +189,8 @@ public static class WebApplicationBuilderExtensions
             .AddScoped<IMailService, MailService>()
             .AddScoped<IOrganizationService, OrganizationService>()
             .AddScoped<IApplicationService, ApplicationService>()
-            .AddScoped<IProjectService, ProjectService>();
+            .AddScoped<IProjectService, ProjectService>()
+            .AddScoped<IUserProfileService, UserProfileService>();
 
         return builder;
     }

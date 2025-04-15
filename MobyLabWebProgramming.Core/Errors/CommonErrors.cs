@@ -12,4 +12,5 @@ public static class CommonErrors
     public static ErrorMessage TechnicalSupport => new(HttpStatusCode.InternalServerError, "An unknown error occurred, contact the technical support!", ErrorCodes.TechnicalError);
     public static ErrorMessage ProjectNotFound => new(HttpStatusCode.NotFound, "Project doesn't exist!", ErrorCodes.EntityNotFound);
     public static ErrorMessage ApplicationNotFound => new(HttpStatusCode.NotFound, "Application doesn't exist!", ErrorCodes.EntityNotFound);
+    public static ErrorMessage UserProfileNotFound => new(HttpStatusCode.NotFound, "User profile doesn't exist!", ErrorCodes.EntityNotFound);
 }
