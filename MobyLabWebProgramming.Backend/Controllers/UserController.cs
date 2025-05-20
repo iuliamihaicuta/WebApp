@@ -72,7 +72,7 @@ public class UserController(IUserService userService) : AuthorizedController(use
         var currentUser = await GetCurrentUser();
 
         return currentUser.Result != null ?
-            FromServiceResponse(await UserService.UpdateUser(user with
+                FromServiceResponse(await UserService.UpdateUser(user with
             {
                 Password = !string.IsNullOrWhiteSpace(user.Password) ? PasswordUtils.HashPassword(user.Password) : null
             }, currentUser.Result)) :

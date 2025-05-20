@@ -125,4 +125,80 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
 
         return ServiceResponse.ForSuccess();
     }
+
+    // public async Task<ServiceResponse> RegisterUSer(RegisterDTO user, CancellationToken cancellationToken = default)
+    // {
+    //     var result = await repository.GetAsync(new UserSpec(user.Email), cancellationToken);
+    //
+    //     if (result != null)
+    //     {
+    //         return ServiceResponse.FromError(new(HttpStatusCode.Conflict, "The user already exists!", ErrorCodes.UserAlreadyExists));
+    //     }
+    //
+    //     await repository.AddAsync(new User
+    //     {
+    //         Email = user.Email,
+    //         Name = user.Name,
+    //         Role = UserRoleEnum.Client,
+    //         Password = user.Password
+    //     }, cancellationToken); // A new entity is created and persisted in the database.
+    //
+    //     await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
+    //
+    //     return ServiceResponse.ForSuccess();
+    // }
+    public async Task<ServiceResponse<LoginResponseDTO>> RegisterUser(RegisterDTO user, CancellationToken cancellationToken = default)
+    {
+        var existingUser = await repository.GetAsync(new UserSpec(user.Email), cancellationToken);
+
+        if (existingUser != null)
+        {
+            return ServiceResponse.FromError<LoginResponseDTO>(new(HttpStatusCode.Conflict, "The user already exists!", ErrorCodes.UserAlreadyExists));
+        }
+
+        var newUser = new User
+        {
+            Email = user.Email,
+            Name = user.Name,
+            Role = UserRoleEnum.Client,
+            Password = user.Password
+        };
+
+        await repository.AddAsync(newUser, cancellationToken);
+
+        
+        // Crearea unui UserProfile asociat cu utilizatorul nou.
+        var userProfile = new UserProfile
+        {
+            UserId = newUser.Id,
+        };
+
+        await repository.AddAsync(userProfile, cancellationToken);
+        
+        // set user profile to user
+        newUser.Profile = userProfile;
+        
+        await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken);
+
+        var userDto = new UserDTO
+        {
+            Id = newUser.Id,
+            Email = newUser.Email,
+            Name = newUser.Name,
+            Role = newUser.Role,
+            Profile = new UserProfileDTO
+            {
+                Id = userProfile.Id,
+                UserId = userProfile.UserId
+            }
+        };
+
+        var token = loginService.GetToken(userDto, DateTime.UtcNow, new(7, 0, 0, 0)); // Generate a JWT token valid for 7 days.
+
+        return ServiceResponse.ForSuccess(new LoginResponseDTO
+        {
+            User = userDto,
+            Token = token
+        });
+    }
 }

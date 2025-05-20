@@ -32,35 +32,35 @@ public class ApplicationController(IApplicationService applicationService, IUser
             : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
     }
     
-    [Authorize]
-    [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByUser([FromRoute] Guid userId, [FromQuery] PaginationSearchQueryParams pagination)
-    {
-        var currentUser = await GetCurrentUser();
-        return currentUser.Result != null
-            ? FromServiceResponse(await applicationService.GetApplicationsByUser(userId, pagination))
-            : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
-    }
-
-    [Authorize]
-    [HttpGet("{projectId:guid}")]
-    public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByProject([FromRoute] Guid projectId, [FromQuery] PaginationSearchQueryParams pagination)
-    {
-        var currentUser = await GetCurrentUser();
-        return currentUser.Result != null
-            ? FromServiceResponse(await applicationService.GetApplicationsByProject(projectId, pagination))
-            : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
-    }
-
-    [Authorize]
-    [HttpGet("{organizationId:guid}")]
-    public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByOrganization([FromRoute] Guid organizationId, [FromQuery] PaginationSearchQueryParams pagination)
-    {
-        var currentUser = await GetCurrentUser();
-        return currentUser.Result != null
-            ? FromServiceResponse(await applicationService.GetApplicationsByOrganization(organizationId, pagination))
-            : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
-    }
+    // [Authorize]
+    // [HttpGet("{userId:guid}")]
+    // public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByUser([FromRoute] Guid userId, [FromQuery] PaginationSearchQueryParams pagination)
+    // {
+    //     var currentUser = await GetCurrentUser();
+    //     return currentUser.Result != null
+    //         ? FromServiceResponse(await applicationService.GetApplicationsByUser(userId, pagination))
+    //         : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
+    // }
+    //
+    // [Authorize]
+    // [HttpGet("{projectId:guid}")]
+    // public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByProject([FromRoute] Guid projectId, [FromQuery] PaginationSearchQueryParams pagination)
+    // {
+    //     var currentUser = await GetCurrentUser();
+    //     return currentUser.Result != null
+    //         ? FromServiceResponse(await applicationService.GetApplicationsByProject(projectId, pagination))
+    //         : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
+    // }
+    //
+    // [Authorize]
+    // [HttpGet("{organizationId:guid}")]
+    // public async Task<ActionResult<RequestResponse<PagedResponse<ApplicationDTO>>>> GetByOrganization([FromRoute] Guid organizationId, [FromQuery] PaginationSearchQueryParams pagination)
+    // {
+    //     var currentUser = await GetCurrentUser();
+    //     return currentUser.Result != null
+    //         ? FromServiceResponse(await applicationService.GetApplicationsByOrganization(organizationId, pagination))
+    //         : ErrorMessageResult<PagedResponse<ApplicationDTO>>(currentUser.Error);
+    // }
 
 
     // [Authorize]
